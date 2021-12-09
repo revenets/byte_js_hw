@@ -1,6 +1,6 @@
-function getPrimeNumber(start_num, end_num) {
-    start_num = Number(prompt("Enter start number"));
-    end_num = Number(prompt("Enter end number"));
+function getPrimeNumber() {
+    let start_num = Number(prompt("Enter start number"));
+    let end_num = Number(prompt("Enter end number"));
 
     for (let i = start_num; i <= end_num; i++) {
         let flag = 0;
