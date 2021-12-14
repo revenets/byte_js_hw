@@ -5,8 +5,37 @@ let userPassword;
 do {
     userName = prompt('Enter your Name: ');
     userSurname = prompt('Enter your Surname: ');
-} while (!userName.length || !userSurname.length);
+    userPassword = prompt('Enter your password: ');
+} while (!userName.length || !userSurname.length || isPasswordValid(userPassword));
 
+const isPasswordValid = (password) => {
+	let upperCount = 0;
+	let lowerCount = 0;
+	let numberCount = 0;
+
+	for ( let i = 0; i < password.length; i++) {
+		
+		let upperChar;
+		let lowerChar;
+		let numberChar;
+
+		if (Number(password[i]) {
+			numberChar = password[i];
+			numberCount++;			
+		} else {	
+			upperChar = password[i].toUpperCase();
+			lowerChar = password[i].toUpperCase();
+			
+			if (password[i] === upperChar) {
+				upperCount++;
+			} else if (password[i] === lowerChar) {
+				lowerCount++;
+			}
+		}
+	}
+
+	return (password.length > 6 && upperCount && lowerCount && numberCount) ? true : false
+}
 
 const formatUserCall = (name, surname) => {
     let formatName = "";
@@ -32,4 +61,4 @@ const formatUserCall = (name, surname) => {
 }
 
 
-console.log(formatUserCall(userName, userSurname));
+alert(formatUserCall(userName, userSurname));
