@@ -12,7 +12,7 @@ const formatUserCall = (name, surname) => {
     let formatName = "";
     let formatSurname = "";
 
-    for (i=0; i < name.length; i++){
+    for (let i=0; i < name.length; i++){
         if (i === 0) {
             formatName += name[i].toUpperCase();
         } else {
@@ -20,7 +20,7 @@ const formatUserCall = (name, surname) => {
         }
     }
     
-    for (i=0; i < surname.length; i++){
+    for (let i=0; i < surname.length; i++){
         if (i === 0) {
             formatSurname += surname[i].toUpperCase();
         } else {
