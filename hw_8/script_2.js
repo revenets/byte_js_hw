@@ -2,15 +2,11 @@ const getOccurrencesCount = (arr) => {
     const result = {};
 
     for (let elem of arr) {
-        let counter = 0;
-
-        for (let i = 0; i < arr.length; i++) {
-            if (arr[i] === elem) {
-                counter++;
-            }
+        if (!result[elem]) {
+            result[elem] = 1;
+        } else {
+            result[elem] += 1;
         }
-
-        result[elem] = counter;
     }
     console.log(result);
 };

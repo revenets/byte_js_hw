@@ -4,8 +4,6 @@ const countTrue = (arr) => {
     for (let elem of arr) {
         if (elem) {
             counter++;
-        } else {
-            continue;
         }
     }
 
