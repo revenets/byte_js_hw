@@ -1,0 +1,36 @@
+.test {
+	display: flex;
+	flex-direction: column;
+	max-width: 15rem;
+	margin: 0 auto;
+}
+
+.btn {
+	padding: .75rem;
+	cursor: pointer;
+	display: inline-flex;
+	align-self: flex-end;
+}
+
+.tooltip {
+	position: absolute;
+	text-align: center;
+	z-index: 2;
+	color: white;
+	background: rgb(0, 0, 0);
+	padding: .5rem;
+}
+
+.tooltip::after {
+	content: "";
+	position: absolute;
+	z-index: 1;
+	background: rgb(0, 0, 0);
+	width: 1rem;
+	height: 1rem;
+	bottom: -24%;
+	left: 52%;
+	transform-origin: center;
+	transform: rotate(-45deg) translate(-50%, -50%);
+	
+}
