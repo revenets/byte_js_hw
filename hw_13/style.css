@@ -1,0 +1,24 @@
+.container {
+    max-width: 60vw;
+    margin: 0 auto;
+}
+
+.gallery {
+    margin-bottom: 20px;
+}
+
+.gallery_img {
+    display: none;
+    max-width: 50vw;
+    max-height: 70vh;
+}
+
+.gallery_btn {
+    padding: 5px 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.active {
+    display: block;
+}
