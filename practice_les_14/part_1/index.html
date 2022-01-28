@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div class="container">
+        <form id="login-form" action="#">
+            <input type="text" name="login" id="login" placeholder="Login">
+            <input type="password" name="password" id="password" placeholder="Password">
+            <button type="submit">Enter</button>
+        </form>
+
+        <div style="margin-top:30px" id="exmp-container">   
+            <input type="text" name="example" id="example" placeholder="Type something">
+        </div>
+
+        <div id="select-container" style="margin-top:30px">
+            <select name="" id="example-select">
+                <option value="apple">Apple</option>
+                <option value="orange">Orange</option>
+            </select>
+        </div>
+
+        <div>
+            <input type="checkbox" name="example-checkbox" id="example-checkbox">
+            <label for="example-checkbox">Test checkbox</label>
+        </div>
+
+        <div style="margin-top:30px">
+            <input type="radio" name="gender" value="Male" checked id="male">
+            <label for="male">Male</label>
+            <input type="radio" name="gender" value="Female" id="female">
+            <label for="female">Female</label>
+            <input type="radio" name="gender" value="Others"  id="others">
+            <label for="others">Others</label>
+
+            <!-- radio button is working with names, simple names create a group with relations-->
+        </div>
+        
+        <hr>
+
+        <div style="margin:30px 0">
+            <input type="text" id="amount" name="amount" placeholder="Enter amount UAH">
+            <select name="currency" id="currency-select">
+                <option value="USD">Dollar</option>
+                <option value="EUR">Euro</option>
+            </select>
+            <span id="result">0.00</span>
+        </div>
+
+        <form id="form-data-example" action="#" style="display:flex; flex-direction:column; width:50vw; gap:10px;">
+            <input type="text" name="surname" id="surname" placeholder="surname">
+            <input type="text" name="name" id="name" placeholder="name">
+            <input type="password" name="password" id="password" placeholder="Password">
+            <button type="submit">Enter</button>
+        </form>
+    </div>
+    <script src="./script.js"></script>
+</body>
+</html>
