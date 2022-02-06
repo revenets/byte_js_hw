@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="timer__setting">
+            <h3>Set timer</h3>
+            <form id="settings__form" >
+                <input type="number" name="seconds" id="seconds" min="0">
+                <button type="submit" id="settings-btn">OK</button>
+            </form>
+        </div>
+        <div class="button__group">
+            <button id="start">Start</button>
+            <button id="pause">Pause</button>
+        </div>
+        <div class="timer__block">
+            <p id="timer" class="hidden"></p>
+            <p id="alarm" class="hidden">TIMER END</p>
+        </div>
+    </div>
+    <script src="./script.js"></script>
+</body>
+</html>
