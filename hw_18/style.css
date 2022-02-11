@@ -1,0 +1,35 @@
+.post-container {
+    max-width: 70vw;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+
+.post-container:not(:last-of-type) {
+    margin-bottom: 10px;
+}
+
+.comments-btn {
+    padding: 5px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.comments-container {
+    margin-left: 10px;
+    display: none;
+}
+
+.comment {
+    border-bottom: 1px solid black;
+    margin-bottom: 10px;
+}
+
+.active {
+    display: block;
+}
+
+.active-post {
+    border: 3px solid rgb(5, 19, 206);
+}
