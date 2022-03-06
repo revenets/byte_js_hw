@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SWAPI Board</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <form style="padding: 10px;" action="" id="swapi-form">
+        <select style="padding: 5px" name="swapi-type" id="swapi-type">
+            <option value="starships">Starship</option>
+            <option value="vehicles">Vehicle</option>
+            <option value="planets">Planet</option>
+        </select>
+        <input style="padding: 5px;" type="number" name="unit-id" id="unit-id" min="0" placeholder="Enter Unit ID">
+        <button style="padding: 5px 10px;" type="submit">Добавить</button>
+    </form>
+    <hr>
+    <div class="results">
+        <div id="preloader" class="lds-spinner hidden"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    </div>
+    <script src="./script.js"></script>
+</body>
+</html>
