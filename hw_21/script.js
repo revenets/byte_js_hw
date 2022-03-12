@@ -2,6 +2,7 @@ const resultsContainer = document.querySelector ('.results');
 const preloader = document.getElementById ('preloader');
 const swapiType = document.getElementById ('swapi-type');
 const swapiID = document.getElementById ('unit-id');
+const BASE_URL = 'https://swapi.dev/api/';
 
 const toggleLoading = () => {
   preloader.classList.toggle ('hidden');
@@ -30,66 +31,56 @@ class Card {
     this.card.append (closeBtn, content);
   }
 
-  setId (id) {
-    this.card.id = id;
-  }
-
-  onCloseClick () {
-    this.card.querySelector('.close_btn').addEventListener('click', () => {
-      localStorage.removeItem (this.card.id);
-    })
-  }
-
   show () {
     resultsContainer.append (this.card);
   }
 
   hide () {
     this.card.remove ();
+    localStorage.removeItem(this.card.id);
   }
 }
 
 class API {
-  constructor (options) {
-    const {type, id} = options;
-    this.type = type;
-    this.id = id;
+  constructor(baseUrl) {
+    this.baseUrl = baseUrl;
   }
 
-  async fetchID () {
+  async getUnitJSON(url) {
     toggleLoading ();
     try {
-      const response = await fetch (
-        `https://swapi.dev/api/${this.type}/${this.id}`
-      );
-      if (response.status === 404) {
-        throw new Error (`No ${this.type} with such ID :(`);
-      }
-      const result = await response.json ();
-      return result;
+    const response = await fetch(`${this.baseUrl}/${url}`);
+    if (response.status === 404) {
+      throw new Error (`No such unit`);
+    }
+    const result = await response.json ();
+    return result;
     } catch (err) {
       alert (err);
-      console.clear ();
-    } finally {
+    } finally { 
       toggleLoading ();
     }
   }
 }
 
+
 class StarshipCard extends Card {
   constructor (options) {
-    const {name, model, manufacturer, max_atmosphering_speed: speed} = options;
+    const {name, model, manufacturer, max_atmosphering_speed: speed, url} = options;
 
     super (options);
     this.name = name;
     this.model = model;
     this.manufacturer = manufacturer;
     this.speed = speed;
+    this.type = url.slice(BASE_URL.length, -3);
+    this.id = url.slice(-2, -1);
     this.render ();
   }
 
   render () {
     super.render ();
+    this.card.id = `${this.type}/${this.id}`;
     const content = this.card.querySelector ('.card_content');
 
     const starshipName = document.createElement ('h3');
@@ -115,17 +106,20 @@ class StarshipCard extends Card {
 
 class PlanetCard extends Card {
   constructor (options) {
-    const {name, climate, terrain, population, ...rest} = options;
+    const {name, climate, terrain, population, url, ...rest} = options;
     super (rest);
     this.name = name;
     this.climate = climate;
     this.terrain = terrain;
     this.population = population;
+    this.type = url.slice(BASE_URL.length, -3);
+    this.id = url.slice(-2, -1);
     this.render ();
   }
 
   render () {
     super.render ();
+    this.card.id = `${this.type}/${this.id}`;
     const content = this.card.querySelector ('.card_content');
 
     const planetName = document.createElement ('h3');
@@ -144,17 +138,20 @@ class PlanetCard extends Card {
 
 class VehicleCard extends Card {
   constructor (options) {
-    const {name, cost_in_credits: cost, crew, passengers, ...rest} = options;
+    const {name, cost_in_credits: cost, crew, passengers, url, ...rest} = options;
     super (rest);
     this.name = name;
     this.cost = cost;
     this.crew = crew;
     this.passengers = passengers;
+    this.type = url.slice(BASE_URL.length, -3);
+    this.id = url.slice(-2, -1);
     this.render ();
   }
 
   render () {
     super.render ();
+    this.card.id = `${this.type}/${this.id}`;
     const content = this.card.querySelector ('.card_content');
 
     const vehicleName = document.createElement ('h3');
@@ -182,59 +179,47 @@ const getAllCardsFromStorage = () => {
   return values;
 };
 
-const renderPermanent = (key, value) => {
-  keySearch = key.split ('-')[0];
-    if (keySearch === 'starships') {
-      const ship = new StarshipCard (value);
-      ship.setId (key);
-      ship.onCloseClick();
+const renderPermanent = (obj) => {
+  const unitType = obj.url.slice(BASE_URL.length, -3);
+  console.log (unitType);
+    if (unitType === 'starships') {
+      const ship = new StarshipCard (obj);
       ship.show ();
-    } else if (keySearch === 'planets') {
-      const planet = new PlanetCard (value);
-      planet.setId (key);
-      planet.onCloseClick();
+    } else if (unitType === 'planets') {
+      const planet = new PlanetCard (obj);
       planet.show ();
-    } else if (keySearch === 'vehicles') {
-      const vehicle = new VehicleCard (value);
-      vehicle.setId (key);
-      vehicle.onCloseClick();
+    } else if (unitType === 'vehicles') {
+      const vehicle = new VehicleCard (obj);
       vehicle.show ();
     }
 }
 
 const renderOnReload = obj => {
   let keys = Object.keys (obj);
+  console.log (keys)
 
   keys.forEach (key => {
     const elem = JSON.parse (localStorage.getItem (key));
-    renderPermanent(key, elem);
+    renderPermanent(elem);
   });
 };
 
+const swapiApi = new API(BASE_URL);
 const swapiForm = document.getElementById ('swapi-form');
 
 swapiForm.addEventListener ('submit', e => {
   e.preventDefault ();
   const unitType = swapiType.value;
   const unitID = swapiID.value;
+  const searchUnit = `${unitType}/${unitID}`;
 
-  swapiForm.reset ();
-
-  const newApi = new API ({
-    type: unitType,
-    id: unitID,
-  });
-
-  const unitIdentify = `${newApi.type}-${newApi.id}`;
-
-  const apiFetch = newApi.fetchID ();
+  const apiFetch = swapiApi.getUnitJSON(searchUnit);
   apiFetch.then (result => {
     if (result) {
-      localStorage.setItem (unitIdentify, JSON.stringify (result));
-      renderPermanent(unitIdentify, result);
+      localStorage.setItem (searchUnit, JSON.stringify(result));
+      renderPermanent(result);
     }
   });
-
 });
 
 const allCards = getAllCardsFromStorage ();
