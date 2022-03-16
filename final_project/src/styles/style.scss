@@ -1,6 +1,15 @@
-$h1-color: green;
+.wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
 
-h1 {
-    color: $h1-color;
 }
 
+.header {
+    display: flex;
+    border-bottom: 1px solid #000;
+    &__title {
+        &-text {
+            text-transform: uppercase;
+        }
+    }
+}

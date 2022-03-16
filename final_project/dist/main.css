@@ -1,6 +1,15 @@
 /*!****************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/styles/style.scss ***!
   \****************************************************************************************************************/
-h1 {
-  color: green;
+.wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  border-bottom: 1px solid #000;
+}
+.header__title__text {
+  text-transform: uppercase;
 }
