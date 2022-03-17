@@ -15,7 +15,7 @@ hr {
 }
 
 .logged {
-    display: flex!important;
+    display: flex !important;
 }
 
 .header {
@@ -55,7 +55,21 @@ hr {
     }
 }
 
+.form-field-wrapper {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 22px;
+    position: relative;
+
+    & > label {
+        margin-bottom: 4px;
+    }
+}
+
 .input-error {
+    position: absolute;
+    bottom: -16px;
+    left: 0;
     font-size: 14px;
     color: red;
 }
@@ -66,7 +80,17 @@ hr {
     border-radius: 4px;
 }
 
+.form-label {
+    display: block;
+    font-size: 1.75rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 32px;
+    margin-top: 8px;
+}
+
 .form-btn {
+    cursor: pointer;
     margin-top: 20px;
     padding: 8px 16px;
     border: 2px solid black;
@@ -74,6 +98,7 @@ hr {
     font-size: 18px;
     font-weight: 500;
     background-color: transparent;
+    text-transform: capitalize;
     align-self: flex-end;
 }
 
@@ -83,28 +108,24 @@ hr {
         margin: 0 auto;
         box-shadow: 4px 4px 8px 0px rgb(34 60 80 / 20%);
         padding: 16px;
-        margin-top: 100px;
+        margin-top: 80px;
         border-radius: 8px;
 
-        &-passive-status {
+        &-switch {
+            outline: none;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
             font-size: 1.125rem;
             text-transform: uppercase;
-            padding: 0;
-            cursor: pointer;
+            padding-left: 10px;
+
             &:hover {
                 text-decoration: underline;
             }
         }
 
-        &-active-status {
-            font-size: 1.75rem;
-            text-transform: uppercase;
-            font-weight: 700;
-            margin-bottom: 32px;
-            margin-top: 8px;
-        }
-
-        &-form {
+        & > form {
             display: flex;
             flex-direction: column;
             row-gap: 5px;
@@ -112,6 +133,38 @@ hr {
         }
     }
 }
+
+.btn-play {
+    background-color: forestgreen;
+}
+
+.btn-stop {
+    background-color: crimson;
+}
+
+// i.play {
+//     position: absolute;
+//     top: 50%;
+//     left: 50%;
+//     transform: translate(-50%, -50%);
+//     color: #fff;
+// }
+
+// i.play::before {
+//     content: "\f04b";
+// }
+
+// i.stop {
+//     position: absolute;
+//     top: 50%;
+//     left: 50%;
+//     transform: translate(-50%, -50%);
+//     color: #fff;
+// }
+
+// i.stop {
+//     content: "\f04c";
+// }
 
 .todo {
     display: grid;
@@ -132,18 +185,77 @@ hr {
             margin-top: 8px;
         }
 
-        &-form {
+        & > form {
             padding: 0 10px;
             display: flex;
             flex-direction: column;
             row-gap: 5px;
-
         }
     }
 
-    &_list {
+    &__list {
         display: flex;
         flex-direction: column;
         row-gap: 1rem;
+
+        &-item {
+            padding: 8px;
+            position: relative;
+
+            &-task-name {
+                font-weight: 700;
+                margin-bottom: 1rem;
+                font-size: 1.5rem;
+            }
+
+            &-task-description {
+                font-size: 1rem;
+                margin-bottom: 1rem;
+            }
+
+            &-timer {
+                display: flex;
+                align-items: center;
+                margin-bottom: 1rem;
+
+                &-btn {
+                    position: relative;
+                    border-radius: 100%;
+                    width: 22px;
+                    height: 22px;
+                    border: none;
+                    margin-right: 8px;
+                    cursor: pointer;
+                    font-size: 10px;
+                }
+            }
+
+            &-task-date {
+                color: gray;
+                margin-bottom: 1rem;
+                font-size: 0.875rem;
+            }
+
+            &-task-btn {
+                padding: 4px 8px;
+                border: 1px solid black;
+                font-size: 0.875rem;
+                border-radius: 4px;
+            }
+
+            &-close-btn {
+                position: absolute;
+                top: 16px;
+                right: 16px;
+                cursor: pointer;
+                background-color: transparent;
+                border-radius: 50%;
+                border: 1px solid gray;
+                color: gray;
+                width: 25px;
+                height: 25px;
+                text-align: center;
+            }
+        }
     }
 }
