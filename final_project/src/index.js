@@ -1,6 +1,7 @@
 import {a} from './test.js';
 import './styles/style.scss';
 import {Form} from '../src/components/Form.js';
+import {Task} from '../src/components/Task.js';
 
 // Creating Login form
 
@@ -59,3 +60,9 @@ const configForm = new Form([
 ]);
 configForm.render('add', 'add task');
 configForm.show(todoConfigWrapper);
+
+
+const taskContainer = document.querySelector('.todo__list');
+const newTask = new Task('1', 'test');
+newTask.render();
+newTask.show(taskContainer);
