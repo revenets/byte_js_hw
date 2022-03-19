@@ -18,6 +18,10 @@ hr {
     display: flex !important;
 }
 
+.hidden {
+    display: none !important;
+}
+
 .header {
     display: flex;
     justify-content: space-between;
@@ -32,7 +36,7 @@ hr {
     }
 
     &__nav {
-        display: flex;
+        display: none;
         align-items: center;
         &-logout {
             color: #000;
@@ -87,6 +91,7 @@ hr {
     font-weight: 700;
     margin-bottom: 32px;
     margin-top: 8px;
+    padding: 0 10px;
 }
 
 .form-btn {
@@ -125,7 +130,7 @@ hr {
             }
         }
 
-        & > form {
+        & > div > form {
             display: flex;
             flex-direction: column;
             row-gap: 5px;
@@ -142,37 +147,13 @@ hr {
     background-color: crimson !important;
 }
 
-// i.play {
-//     position: absolute;
-//     top: 50%;
-//     left: 50%;
-//     transform: translate(-50%, -50%);
-//     color: #fff;
-// }
-
-// i.play::before {
-//     content: "\f04b";
-// }
-
-// i.stop {
-//     position: absolute;
-//     top: 50%;
-//     left: 50%;
-//     transform: translate(-50%, -50%);
-//     color: #fff;
-// }
-
-// i.stop {
-//     content: "\f04c";
-// }
-
 .todo {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 2rem;
     padding-top: 16px;
 
-    &__config {
+    &__config-wrapper > div {
         box-shadow: 4px 4px 8px 0px rgb(34 60 80 / 20%);
         padding: 16px;
         border-radius: 8px;
@@ -238,6 +219,11 @@ hr {
                         transform: translate(-50%, -50%);
                         color: #fff;
                     }
+
+                    &:disabled {
+                        cursor: not-allowed;
+                        background-color: #717171;
+                    }
                 }
             }
 
@@ -266,6 +252,10 @@ hr {
                 width: 25px;
                 height: 25px;
                 text-align: center;
+            }
+
+            &-finished {
+                text-decoration: line-through;
             }
         }
     }

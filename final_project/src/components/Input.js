@@ -9,11 +9,11 @@ export class Input {
 
   render (form) {
     const inputField = document.createElement ('input');
-    inputField.setAttribute = ('type', this.type);
-    inputField.setAttribute = ('id', this.id);
+    inputField.type = this.type;
+    inputField.id = this.id;
     inputField.classList.add ('form-input');
     const label = document.createElement ('label');
-    label.htmlFor = inputField;
+    label.htmlFor = this.id;
     label.innerText = this.name;
     const errorSpan = document.createElement ('span');
     errorSpan.classList.add ('input-error');
