@@ -1,13 +1,17 @@
+import { api } from './API.js';
+
 export class Task {
   constructor (name, description) {
     this.name = name;
     this.description = description;
     this.taskContainer = document.createElement ('div');
-    this.taskContainer.classList.add ('todo__list-item');
+    this.closeButton = document.createElement ('button');
+    this.render();
   }
 
   render () {
     const CLASS_NAME = 'todo__list-item';
+    this.taskContainer.classList.add ('todo__list-item');
 
     const taskName = document.createElement ('h3');
     const taskDescription = document.createElement ('p');
@@ -22,7 +26,7 @@ export class Task {
 
     const taskDate = document.createElement ('p');
     const taskCompleteButton = document.createElement ('button');
-    const closeButton = document.createElement ('button');
+    
 
     taskName.classList.add (`${CLASS_NAME}-task-name`);
     taskDescription.classList.add (`${CLASS_NAME}-task-description`);
@@ -30,7 +34,7 @@ export class Task {
     trackerButton.classList.add (`${CLASS_NAME}-timer-btn`);
     taskDate.classList.add (`${CLASS_NAME}-task-date`);
     taskCompleteButton.classList.add (`${CLASS_NAME}-task-btn`);
-    closeButton.classList.add (`${CLASS_NAME}-close-btn`);
+    this.closeButton.classList.add (`${CLASS_NAME}-close-btn`);
 
     taskName.innerText = this.name;
     taskDescription.innerText = this.description;
@@ -47,11 +51,8 @@ export class Task {
         
     })
 
-    closeButton.innerHTML = '<i class="fas fa-times"></i>';
-    closeButton.addEventListener ('click', () => {
-      this.taskContainer.remove ();
-      // API Logic!!!!!!!!!!!!!!!!
-    });
+    this.closeButton.innerHTML = '<i class="fas fa-times"></i>';
+    
 
     this.taskContainer.append (
       taskName,
@@ -59,11 +60,18 @@ export class Task {
       taskTracker,
       taskDate,
       taskCompleteButton,
-      closeButton
+      this.closeButton
     );
   }
 
   show (div) {
     div.append (this.taskContainer);
+  }
+
+  setDeleteBtnID (id) {
+    this.closeButton.addEventListener ('click', () => {
+      this.taskContainer.remove ();
+      api.removeTask(id);
+    });
   }
 }

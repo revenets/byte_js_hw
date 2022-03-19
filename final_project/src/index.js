@@ -12,6 +12,7 @@ const todoConfigWrapper = document.querySelector ('.todo__config-wrapper');
 const headerNav = document.querySelector ('.header__nav');
 const headerUserLogo = document.querySelector ('.header__nav-user');
 const logoutButton = document.querySelector ('.header__nav-logout');
+const taskList = document.querySelector ('.todo__list');
 
 const formWrapper = document.createElement ('div');
 const switchRegisterBtn = document.createElement ('button');
@@ -48,8 +49,21 @@ logoutButton.addEventListener ('click', () => {
   document.location.reload ();
 });
 
-loginForm.formBody.addEventListener ('submit', e => {
-  e.preventDefault ();
+const scriptAfterLogin = () => {
+  api.autoLogin ().then (user => (headerUserLogo.innerText = user.name[0]));
+  hideBlock (logContainer);
+  configForm.show (todoConfigWrapper);
+  headerNav.classList.toggle ('logged');
+  api.getAllTasks().then(results => results.forEach (res => {
+    console.log (res)
+    const newTask = new Task(res.name, res.description);
+    newTask.setDeleteBtnID(res._id);
+    newTask.show(taskList);
+  }));
+};
+
+loginForm.formBody.addEventListener ('submit', event => {
+  event.preventDefault ();
   const logEmail = document.getElementById ('login-email').value;
   const logPassword = document.getElementById ('login-password').value;
   api
@@ -58,10 +72,7 @@ loginForm.formBody.addEventListener ('submit', e => {
       password: logPassword,
     })
     .then (result => {
-      api.autoLogin ();
-      hideBlock (logContainer);
-      configForm.show (todoConfigWrapper);
-      headerNav.classList.toggle ('logged');
+      scriptAfterLogin();
     })
     .catch (error => {
       console.log (error);
@@ -69,15 +80,27 @@ loginForm.formBody.addEventListener ('submit', e => {
     });
 });
 
+configForm.formBody.addEventListener('submit', (event) => {
+  event.preventDefault ();
+
+  const taskName = document.getElementById ('task-add-name').value;
+  const taskDescription = document.getElementById ('task-add-description').value;
+  api.addTask({
+    name: taskName,
+    description: taskDescription,
+  }).then(result => {
+    console.log (result);
+    const newTask = new Task(result.name, result.description);
+    newTask.show(taskList);
+  }).catch(error => {
+    console.log (error);
+  })
+})
 
 // Render on reload
 const isAuthSuccess = api.isLoggedIn ();
 if (isAuthSuccess) {
-  api.autoLogin ();
-  hideBlock (logContainer);
-  console.log ('welcome');
-  configForm.show (todoConfigWrapper);
-  headerNav.classList.toggle ('logged');
+  scriptAfterLogin();
 } else {
   loginForm.show (formWrapper);
 }

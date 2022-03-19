@@ -11,7 +11,8 @@ class Form {
   }
 
   render () {
-    this.formBody.id = this.title;
+    const idString = String(this.title).split(' ').join('_');
+    this.formBody.id = idString;
 
     this.formTitle.classList.add ('form-label');
     this.formTitle.innerHTML = this.title;

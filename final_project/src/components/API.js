@@ -61,20 +61,49 @@ class API {
     return Boolean (localStorage.getItem (TOKEN_STR));
   }
 
-  autoLogin() {
-      const storageToken = localStorage.getItem (TOKEN_STR);
-      this.headers.Authorization = `Bearer ${storageToken}`;
+  autoLogin () {
+    const storageToken = localStorage.getItem (TOKEN_STR);
+    this.headers.Authorization = `Bearer ${storageToken}`;
 
-      return this.getUser();
+    return this.getUser ();
   }
 
-  addTask () {}
+  async addTask (taskData) {
+    const response = await fetch (`${this.baseUrl}/api/task`, {
+      method: 'POST',
+      headers: this.headers,
+      body: JSON.stringify (taskData),
+    });
 
-  postTask () {}
+    this.handleError (response);
+
+    const task = await response.json ();
+    return task;
+  }
+
+  async getAllTasks () {
+    const response = await fetch (`${this.baseUrl}/api/task`, {
+      method: 'GET',
+      headers: this.headers,
+    });
+
+    this.handleError (response);
+
+    const tasks = await response.json ();
+    return tasks;
+  }
+
 
   taskTimer () {}
 
-  removeTask () {}
+  async removeTask (id) {
+    const response = await fetch (`${this.baseUrl}/api/task/${id}`, {
+      method: 'DELETE',
+      headers: this.headers,
+    });
+
+    this.handleError (response);
+  }
 }
 
 export const api = new API ();
