@@ -93,11 +93,33 @@ class API {
     return tasks;
   }
 
+  async getTaskById (taskId) {
+    const response = await fetch (`${this.baseUrl}/api/task/${taskId}`, {
+      method: 'GET',
+      headers: this.headers,
+    });
+
+    this.handleError (response);
+    const task = await response.json ();
+    return task;
+  }
+
+  async editTask (taskId, editTask) {
+    const response = await fetch (`${this.baseUrl}/api/task/${taskId}`, {
+      method: 'PATCH',
+      headers: this.headers,
+      body: JSON.stringify (editTask),
+    });
+
+    this.handleError (response);
+    const task = await response.json ();
+    return task;
+  }
 
   taskTimer () {}
 
-  async removeTask (id) {
-    const response = await fetch (`${this.baseUrl}/api/task/${id}`, {
+  async removeTask (taskId) {
+    const response = await fetch (`${this.baseUrl}/api/task/${taskId}`, {
       method: 'DELETE',
       headers: this.headers,
     });

@@ -55,9 +55,7 @@ const scriptAfterLogin = () => {
   configForm.show (todoConfigWrapper);
   headerNav.classList.toggle ('logged');
   api.getAllTasks().then(results => results.forEach (res => {
-    console.log (res)
-    const newTask = new Task(res.name, res.description);
-    newTask.setDeleteBtnID(res._id);
+    const newTask = new Task(res.name, res.description, res._id);
     newTask.show(taskList);
   }));
 };
@@ -90,7 +88,7 @@ configForm.formBody.addEventListener('submit', (event) => {
     description: taskDescription,
   }).then(result => {
     console.log (result);
-    const newTask = new Task(result.name, result.description);
+    const newTask = new Task(result.name, result.description, result._id);
     newTask.show(taskList);
   }).catch(error => {
     console.log (error);

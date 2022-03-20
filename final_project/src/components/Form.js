@@ -1,5 +1,4 @@
 import {Input} from './Input.js';
-import {api} from './API.js';
 
 class Form {
   constructor (title) {

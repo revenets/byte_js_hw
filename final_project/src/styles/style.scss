@@ -182,7 +182,7 @@ hr {
         &-item {
             box-shadow: 4px 4px 8px 0px rgb(34 60 80 / 20%);
             border-radius: 8px;
-            padding: 8px;
+            padding: 20px 30px;
             position: relative;
 
             &-task-name {
@@ -221,8 +221,8 @@ hr {
                     }
 
                     &:disabled {
-                        cursor: not-allowed;
-                        background-color: #717171;
+                        cursor: not-allowed !important;
+                        background-color: #717171 !important;
                     }
                 }
             }
@@ -235,9 +235,15 @@ hr {
 
             &-task-btn {
                 padding: 4px 8px;
+                background-color: transparent;
                 border: 1px solid black;
                 font-size: 0.875rem;
                 border-radius: 4px;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: #f7f7f7;
+                }
             }
 
             &-close-btn {
@@ -252,11 +258,16 @@ hr {
                 width: 25px;
                 height: 25px;
                 text-align: center;
-            }
 
-            &-finished {
-                text-decoration: line-through;
+                &:hover {
+                    background-color: #f7f7f7;
+                    color: #000;
+                }
             }
         }
     }
+}
+
+.task-finished {
+    text-decoration: line-through;
 }
