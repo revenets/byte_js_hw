@@ -3,7 +3,8 @@ import {LoginForm, RegisterForm, TaskConfigForm} from './components/Form.js';
 import {Task} from '../src/components/Task.js';
 import {api, TOKEN_STR} from '../src/components/API.js';
 
-// Creating Login form
+// Create login form wrapper
+
 const LOGIN_TEXT = 'login';
 const REGISTER_TEXT = 'register';
 
@@ -24,9 +25,13 @@ switchRegisterBtn.innerText = REGISTER_TEXT;
 formWrapper.prepend (switchRegisterBtn);
 logContainer.append (formWrapper);
 
+// Create classes of forms
+
 const loginForm = new LoginForm ('login');
 const registerForm = new RegisterForm ('register');
 const configForm = new TaskConfigForm ('add task');
+
+// Add login form events
 
 const hideBlock = block => {
   block.classList.toggle ('hidden');
@@ -49,16 +54,22 @@ logoutButton.addEventListener ('click', () => {
   document.location.reload ();
 });
 
+// Script to do after autologin
+
 const scriptAfterLogin = () => {
   api.autoLogin ().then (user => (headerUserLogo.innerText = user.name[0]));
   hideBlock (logContainer);
   configForm.show (todoConfigWrapper);
   headerNav.classList.toggle ('logged');
-  api.getAllTasks().then(results => results.forEach (res => {
-    const newTask = new Task(res.name, res.description, res._id);
-    newTask.show(taskList);
-  }));
+  api.getAllTasks ().then (results =>
+    results.forEach (res => {
+      const newTask = new Task (res.name, res.description, res._id);
+      newTask.show (taskList);
+    })
+  );
 };
+
+// Handling login form submit
 
 loginForm.formBody.addEventListener ('submit', event => {
   event.preventDefault ();
@@ -70,7 +81,7 @@ loginForm.formBody.addEventListener ('submit', event => {
       password: logPassword,
     })
     .then (result => {
-      scriptAfterLogin();
+      scriptAfterLogin ();
     })
     .catch (error => {
       console.log (error);
@@ -78,27 +89,56 @@ loginForm.formBody.addEventListener ('submit', event => {
     });
 });
 
-configForm.formBody.addEventListener('submit', (event) => {
+// // Handling register form submit
+
+registerForm.formBody.addEventListener ('submit', event => {
+  event.preventDefault ();
+  const regEmail = document.getElementById ('register-email').value;
+  const regName = document.getElementById ('register-name').value;
+  const regPassword = document.getElementById ('register-password').value;
+  api
+    .regUser ({
+      email: regEmail,
+      name: regName,
+      password: regPassword,
+    })
+    .then (() => {
+      registerForm.hide ();
+      loginForm.show (formWrapper);
+      switchRegisterBtn.innerHTML = REGISTER_TEXT;
+    })
+    .catch (error => {
+      console.log (error);
+    });
+});
+
+// Handling task config form submit
+
+configForm.formBody.addEventListener ('submit', event => {
   event.preventDefault ();
 
   const taskName = document.getElementById ('task-add-name').value;
-  const taskDescription = document.getElementById ('task-add-description').value;
-  api.addTask({
-    name: taskName,
-    description: taskDescription,
-  }).then(result => {
-    console.log (result);
-    const newTask = new Task(result.name, result.description, result._id);
-    newTask.show(taskList);
-  }).catch(error => {
-    console.log (error);
-  })
-})
+  const taskDescription = document.getElementById ('task-add-description')
+    .value;
+  api
+    .addTask ({
+      name: taskName,
+      description: taskDescription,
+    })
+    .then (result => {
+      console.log (result);
+      const newTask = new Task (result.name, result.description, result._id);
+      newTask.show (taskList);
+    })
+    .catch (error => {
+      console.log (error);
+    });
+});
 
 // Render on reload
 const isAuthSuccess = api.isLoggedIn ();
 if (isAuthSuccess) {
-  scriptAfterLogin();
+  scriptAfterLogin ();
 } else {
   loginForm.show (formWrapper);
 }
