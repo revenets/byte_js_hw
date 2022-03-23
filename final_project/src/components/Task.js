@@ -113,6 +113,11 @@ export class Task {
           this.taskContainer.classList.toggle ('task-finished');
           trackerButton.toggleAttribute ('disabled');
           taskCompleteButton.innerHTML = 'Restart';
+          clearInterval (interval);
+          interval = null;
+          trackerButton.classList.remove ('btn-stop');
+          trackerIcon.classList.remove ('fa-pause');
+          trackerIcon.classList.add ('fa-play');
           api.editTask (this.taskId, {
             isFinished: true,
           });

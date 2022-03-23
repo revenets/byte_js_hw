@@ -5,21 +5,30 @@ export class Input {
     this.id = id;
     this.inputWrapper = document.createElement ('div');
     this.inputWrapper.classList.add ('form-field-wrapper');
+    this.errorSpan = document.createElement ('span');
+    this.inputField = document.createElement ('input');
   }
 
   render (form) {
-    const inputField = document.createElement ('input');
-    inputField.type = this.type;
-    inputField.id = this.id;
-    inputField.classList.add ('form-input');
+    this.inputField.type = this.type;
+    this.inputField.id = this.id;
+    this.inputField.name =  this.name.toLowerCase();
+    this.inputField.classList.add ('form-input');
     const label = document.createElement ('label');
     label.htmlFor = this.id;
     label.innerText = this.name;
-    const errorSpan = document.createElement ('span');
-    errorSpan.classList.add ('input-error');
+    this.errorSpan.classList.add ('input-error');
 
-    this.inputWrapper.append(label, inputField, errorSpan);
+    this.inputField.addEventListener("input", () => {
+      this.errorSpan.innerText = "";
+    })
+
+    this.inputWrapper.append(label, this.inputField, this.errorSpan);
     form.append(this.inputWrapper);
+  }
+
+  setErrorMessage (message) {
+    this.errorSpan.innerText = message;
   }
   
 

@@ -1,5 +1,13 @@
 export const TOKEN_STR = 'token';
 
+class ApiError extends Error {
+  constructor ({message, data, status}) { 
+    super(message);
+    this.status = status;
+    this.data = data;
+  }
+}
+
 class API {
   constructor () {
     this.baseUrl = 'https://byte-tasks.herokuapp.com';
@@ -9,11 +17,16 @@ class API {
     };
   }
 
-  handleError (response) {
+  async handleError (response) {
     if (!response.ok) {
-      throw new Error (
-        `ON URL ${response.url} RESPONSE STATUS: ${response.status}`
-      );
+      // throw new Error (
+      //   `ON URL ${response.url} RESPONSE STATUS: ${response.status}`
+      // );
+      throw new ApiError({
+        message: `Error`,
+        data: await response.json (),
+        status: response.status
+      })
     }
   }
 
@@ -24,7 +37,7 @@ class API {
       body: JSON.stringify (userData),
     });
 
-    this.handleError (response);
+    await this.handleError (response);
 
     const user = await response.json ();
     return user;
@@ -37,9 +50,10 @@ class API {
       body: JSON.stringify (userData),
     });
 
-    this.handleError (response);
+    await this.handleError (response);
 
     const result = await response.json ();
+
     this.headers.Authorization = `Bearer ${result.token}`;
 
     localStorage.setItem (TOKEN_STR, result.token);
@@ -51,7 +65,7 @@ class API {
       headers: this.headers,
     });
 
-    this.handleError (response);
+    await this.handleError (response);
 
     const user = await response.json ();
     return user;
@@ -75,7 +89,7 @@ class API {
       body: JSON.stringify (taskData),
     });
 
-    this.handleError (response);
+    await this.handleError (response);
 
     const task = await response.json ();
     return task;
@@ -87,7 +101,7 @@ class API {
       headers: this.headers,
     });
 
-    this.handleError (response);
+    await this.handleError (response);
 
     const tasks = await response.json ();
     return tasks;
@@ -99,7 +113,7 @@ class API {
       headers: this.headers,
     });
 
-    this.handleError (response);
+    await this.handleError (response);
     const task = await response.json ();
     return task;
   }
@@ -111,7 +125,7 @@ class API {
       body: JSON.stringify (editTask),
     });
 
-    this.handleError (response);
+    await this.handleError (response);
     const task = await response.json ();
     return task;
   }
@@ -124,7 +138,7 @@ class API {
       headers: this.headers,
     });
 
-    this.handleError (response);
+    await this.handleError (response);
   }
 }
 
