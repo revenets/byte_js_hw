@@ -62,24 +62,25 @@ export class Form {
       input.render (this.formBody);
     });
 
+    const preloader = document.querySelector ('.preloader__wrapper');
+
     this.formBody.addEventListener ('submit', async event => {
       event.preventDefault ();
 
       this.formValues = Form.getInputValues (this.inputs);
       this.formSubmitButton.setAttribute ('disabled', '');
       // console.log (this.formValues);
+      preloader.classList.toggle ('hidden');
       try {
         await this.submitHandler (this.formValues);
         this.afterSubmit ();
-        
       } catch (error) {
         if (!error.data.details) {
-          if(error.data.email) {
+          if (error.data.email) {
             alert (error.data.email);
           } else {
-            alert (error.data.message)
+            alert (error.data.message);
           }
-          
         } else {
           error.data.details.forEach (({message, path}) => {
             const invalidInput = this.inputs.find (input => {
@@ -89,7 +90,10 @@ export class Form {
           });
         }
       }
-
+      this.inputs.forEach (input => {
+        input.inputField.value = "";
+      })
+      preloader.classList.toggle ('hidden');
       this.formSubmitButton.removeAttribute ('disabled');
     });
 
