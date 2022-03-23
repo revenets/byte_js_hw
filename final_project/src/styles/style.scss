@@ -95,6 +95,20 @@ hr {
     padding: 0 10px;
 }
 
+.form-switch {
+    outline: none;
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    font-size: 1.125rem;
+    text-transform: uppercase;
+    padding-left: 10px;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
 .form-btn {
     cursor: pointer;
     margin-top: 20px;
@@ -117,19 +131,7 @@ hr {
         margin-top: 80px;
         border-radius: 8px;
 
-        &-switch {
-            outline: none;
-            cursor: pointer;
-            border: none;
-            background-color: transparent;
-            font-size: 1.125rem;
-            text-transform: uppercase;
-            padding-left: 10px;
-
-            &:hover {
-                text-decoration: underline;
-            }
-        }
+    
 
         & > div > form {
             display: flex;
@@ -241,7 +243,6 @@ hr {
                 font-size: 0.875rem;
                 border-radius: 4px;
                 cursor: pointer;
-
                 &:hover {
                     background-color: #f7f7f7;
                 }
@@ -272,3 +273,4 @@ hr {
 .task-finished {
     text-decoration: line-through;
 }
+

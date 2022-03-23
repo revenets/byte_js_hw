@@ -1,87 +1,124 @@
 import {Input} from './Input.js';
 import {api} from './API.js';
 
-class Form {
-  constructor (title) {
+export class Form {
+  constructor (
+    title,
+    allowSwitchBtn,
+    switchInner,
+    inputs,
+    submitBtnText,
+    submitHandler,
+    parentDiv,
+    afterSubmit
+  ) {
     this.title = title;
+    this.allowSwitchBtn = allowSwitchBtn;
+    this.switchInner = switchInner;
+    this.inputs = inputs;
+    this.submitBtnText = submitBtnText;
+    this.submitHandler = submitHandler;
+    this.parentDiv = parentDiv;
+    this.afterSubmit = afterSubmit;
+
     this.formTitle = document.createElement ('h3');
     this.formBody = document.createElement ('form');
-    this.formButton = document.createElement ('button');
-    this.formContainer = document.createElement ('div');
+    this.formSwitchButton = document.createElement ('button');
+    this.formSubmitButton = document.createElement ('button');
+    this.formWrapper = document.createElement ('div');
+
+    this.render ();
+  }
+
+  static getInputValues (inputs) {
+    let values = {};
+    inputs.forEach (input => {
+      // console.log (input);
+      values[input.name.toLowerCase ()] = input.inputField.value;
+    });
+    return values;
   }
 
   render () {
+    if (this.allowSwitchBtn) {
+      this.formSwitchButton.innerText = this.switchInner;
+    } else {
+      this.formSwitchButton.style.display = 'none';
+    }
+
     const idString = String (this.title).split (' ').join ('_');
     this.formBody.id = idString;
 
     this.formTitle.classList.add ('form-label');
     this.formTitle.innerHTML = this.title;
 
-    this.formButton.classList.add ('form-btn');
-    this.formButton.type = 'submit';
+    this.formSwitchButton.classList.add ('form-switch');
 
-    this.formContainer.append (this.formTitle, this.formBody);
+    this.formSubmitButton.classList.add ('form-btn');
+    this.formSubmitButton.type = 'submit';
+    this.formSubmitButton.innerText = this.submitBtnText;
+
+    this.inputs.forEach (input => {
+      input.render (this.formBody);
+    });
+
+    this.formBody.addEventListener ('submit', async event => {
+      event.preventDefault ();
+
+      this.formValues = Form.getInputValues (this.inputs);
+      this.formSubmitButton.setAttribute ('disabled', '');
+      // console.log (this.formValues);
+      try {
+        await this.submitHandler (this.formValues);
+        this.afterSubmit ();
+        
+      } catch (error) {
+        if (!error.data.details) {
+          if(error.data.email) {
+            alert (error.data.email);
+          } else {
+            alert (error.data.message)
+          }
+          
+        } else {
+          error.data.details.forEach (({message, path}) => {
+            const invalidInput = this.inputs.find (input => {
+              return input.inputField.name === path[0];
+            });
+            invalidInput.setErrorMessage (message);
+          });
+        }
+      }
+
+      this.formSubmitButton.removeAttribute ('disabled');
+    });
+
+    this.formBody.append (this.formSubmitButton);
+
+    this.formWrapper.append (
+      this.formSwitchButton,
+      this.formTitle,
+      this.formBody
+    );
   }
 
-  show (div) {
-    div.append (this.formContainer);
+  switchToFormEvent (form) {
+    this.formSwitchButton.addEventListener ('click', () => {
+      this.hide ();
+      form.show (this.parentDiv);
+    });
+  }
+
+  switchToForm (form) {
+    this.hide ();
+    form.show (this.parentDiv);
+  }
+
+  show () {
+    this.parentDiv.append (this.formWrapper);
   }
 
   hide () {
-    this.formContainer.remove ();
-  }
-}
-
-export class LoginForm extends Form {
-  constructor (options) {
-    super (options);
-    this.render ();
-  }
-  render () {
-    super.render ();
-    const emailInput = new Input ('Email', 'text', 'login-email');
-    emailInput.render (this.formBody);
-    const passwordInput = new Input ('Password', 'password', 'login-password');
-    passwordInput.render (this.formBody);
-    this.formBody.append (this.formButton);
-    this.formButton.innerText = 'Submit';
-  }
-}
-
-export class RegisterForm extends Form {
-  constructor (options) {
-    super (options);
-    this.render ();
-  }
-  render () {
-    super.render ();
-    const emailInput = new Input ('Email', 'text', 'reg-email');
-    emailInput.render (this.formBody);
-    const nameInput = new Input ('Name', 'text', 'reg-name');
-    nameInput.render (this.formBody);
-    const passwordInput = new Input ('Password', 'password', 'reg-password');
-    passwordInput.render (this.formBody);
-    this.formBody.append (this.formButton);
-    this.formButton.innerText = 'Submit';
-  }
-}
-
-export class TaskConfigForm extends Form {
-  constructor (options) {
-    super (options);
-    this.render ();
-  }
-  render () {
-    super.render ();
-    const taskInput = new Input ('Name', 'text', 'task-add-name');
-    taskInput.render (this.formBody);
-    const descriptionInput = new Input (
-      'Description',
-      'text',
-      'task-add-description'
-    );
-    descriptionInput.render (this.formBody);
-    this.formBody.append (this.formButton);
-    this.formButton.innerText = 'Add';
+    this.formWrapper.remove ();
   }
 }

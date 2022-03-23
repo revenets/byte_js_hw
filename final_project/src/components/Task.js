@@ -36,8 +36,8 @@ export class Task {
     const trackerIcon = document.createElement ('i');
     trackerIcon.classList.add ('fas', 'fa-play');
     trackerButton.append (trackerIcon);
-    const trackerCountdown = document.createElement ('span');
-    taskTracker.append (trackerButton, trackerCountdown);
+    this.trackerCountdown = document.createElement ('span');
+    taskTracker.append (trackerButton, this.trackerCountdown);
 
     const taskDate = document.createElement ('p');
     const taskCompleteButton = document.createElement ('button');
@@ -61,68 +61,84 @@ export class Task {
       minute: '2-digit',
       second: '2-digit',
     });
+    let interval = null;
+    let timer = 0;
+    this.trackerCountdown.innerHTML = msToTime (timer);
+    taskCompleteButton.innerText = 'Mark as done';
     this.closeButton.innerHTML = '<i class="fas fa-times"></i>';
 
-    api.getTaskById (this.taskId).then (result => {
-      trackerCountdown.innerText = msToTime (result.timeTracked);
-      if (result.isFinished) {
-        this.taskContainer.classList.add ('task-finished');
-        taskCompleteButton.innerText = 'Restart';
-        trackerButton.setAttribute ('disabled', '');
+    
+
+    const startTimer = () => {
+      trackerButton.classList.add ('btn-stop');
+      trackerIcon.classList.remove ('fa-play');
+      trackerIcon.classList.add ('fa-pause');
+      api.editTask (this.taskId, {isActive: true});
+      return new Promise (resolve => {
+        interval = setInterval (() => {
+          timer += 1000;
+          this.trackerCountdown.innerHTML = msToTime (timer);
+        }, 1000);
+      });
+    };
+
+    const stopTimer = () => {
+      trackerButton.classList.remove ('btn-stop');
+      trackerIcon.classList.remove ('fa-pause');
+      trackerIcon.classList.add ('fa-play');
+      api.editTask (this.taskId, {isActive: false}).then (task => {
+        // startTimerValue = msToTime (task.timeTracked);
+      });
+      clearInterval (interval);
+      interval = null;
+    };
+
+    const finishTask = () => {
+      this.taskContainer.classList.add ('task-finished');
+      taskCompleteButton.innerText = 'Restart';
+      trackerButton.setAttribute ('disabled', '');
+    };
+
+    const restartTask = () => {
+      this.taskContainer.classList.remove ('task-finished');
+      taskCompleteButton.innerText = 'Mark as done';
+      trackerButton.removeAttribute ('disabled', '');
+    };
+
+    trackerButton.addEventListener ('click', () => {
+      if (trackerButton.classList.contains ('btn-stop')) {
+        stopTimer ();
       } else {
-        this.taskContainer.classList.remove ('task-finished');
-        taskCompleteButton.innerText = 'Mark as done';
-        trackerButton.removeAttribute ('disabled', '');
+        startTimer ();
+        console.log (timer)
       }
+    });
 
-      trackerButton.addEventListener ('click', () => {
-        if (trackerButton.classList.contains ('btn-stop')) {
-          trackerButton.classList.remove ('btn-stop');
-          trackerIcon.classList.remove ('fa-pause');
-          trackerIcon.classList.add ('fa-play');
+    taskCompleteButton.addEventListener ('click', () => {
+      if (taskCompleteButton.innerHTML === 'Restart') {
+        restartTask();
+        this.trackerCountdown.innerHTML = "00:00:00"
+        api.editTask (this.taskId, {
+          isFinished: false,
+          timeTracked: 0,
+        });
+      } else {
+        finishTask();
+        stopTimer ();
+        api.editTask (this.taskId, {
+          isFinished: true,
+        });
+      }
+    });
 
-          clearInterval (interval);
-          interval = null;
-          api.editTask (this.taskId, {isActive: false});
-        } else {
-          trackerButton.classList.add ('btn-stop');
-          trackerIcon.classList.remove ('fa-play');
-          trackerIcon.classList.add ('fa-pause');
-          api.editTask (this.taskId, {isActive: true});
-
-          return new Promise (resolve => {
-            interval = setInterval (() => {
-              api.getTaskById (this.taskId).then (task => {
-                trackerCountdown.innerText = msToTime (task.timeTracked);
-              });
-              resolve ();
-            }, 1000);
-          });
-        }
-      });
-
-      taskCompleteButton.addEventListener ('click', () => {
-        if (taskCompleteButton.innerHTML === 'Restart') {
-          this.taskContainer.classList.toggle ('task-finished');
-          trackerButton.toggleAttribute ('disabled');
-          taskCompleteButton.innerHTML = 'Mark as done';
-          api.editTask (this.taskId, {
-            isFinished: false,
-          });
-        } else {
-          this.taskContainer.classList.toggle ('task-finished');
-          trackerButton.toggleAttribute ('disabled');
-          taskCompleteButton.innerHTML = 'Restart';
-          clearInterval (interval);
-          interval = null;
-          trackerButton.classList.remove ('btn-stop');
-          trackerIcon.classList.remove ('fa-pause');
-          trackerIcon.classList.add ('fa-play');
-          api.editTask (this.taskId, {
-            isFinished: true,
-          });
-        }
-      });
+    api.getTaskById (this.taskId).then (result => {
+      this.trackerCountdown.innerText = msToTime (result.timeTracked);
+      timer = result.timeTracked;
+      if (result.isFinished) {
+        finishTask ();
+      } else {
+        restartTask ();
+      }
     });
 
     this.closeButton.addEventListener ('click', () => {
