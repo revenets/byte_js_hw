@@ -1,16 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" integrity="sha512-NmLkDIU1C/C88wi324HBc+S2kLhi08PN5GDeUVVVC/BVt/9Izdsc9SVeVfA1UZbY3sHUlDSyRXhCzHfr6hmPPw==" crossorigin="anonymous" referrerpolicy="no-referrer">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css"
+        integrity="sha512-NmLkDIU1C/C88wi324HBc+S2kLhi08PN5GDeUVVVC/BVt/9Izdsc9SVeVfA1UZbY3sHUlDSyRXhCzHfr6hmPPw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+        integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+        crossorigin="anonymous">
     <title>Final project</title>
 <script defer src="bundle.js"></script><link href="main.css" rel="stylesheet"></head>
+
 <body>
     <div class="wrapper">
-        <header class="header">
+        <header class="header container">
             <div class="header__title">
                 <p class="header__title-text">byte tasks</p>
             </div>
@@ -19,21 +25,35 @@
                 <span class="header__nav-user"></span>
             </div>
         </header>
-        <main class="todo">
-            <div class="todo__config">
-                <h2 class="todo__config-title">add task</h2>
-                <form class="todo__config-form">
-                    <label for="task-name">Name</label>
-                    <input type="text" id="add-task-name" class="todo__config-form-task">
-                    <label for="task-description">Description</label>
-                    <input type="text" id="add-task-description" class="todo__config-form-description">
-                    <button class="todo__config-form-btn" type="submit">Add</button>
-                </form>
+        <hr>
+        <div class="login container">
+
+        </div>
+        <main class="todo container">
+            <div class="todo__config-wrapper">
+
             </div>
             <div class="todo__list">
-                <p>hello!</p>
+
+            </div>
+            <div class="preloader__wrapper hidden">
+                <div id="preloader" class="lds-spinner">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
             </div>
         </main>
     </div>
 </body>
+
 </html>
