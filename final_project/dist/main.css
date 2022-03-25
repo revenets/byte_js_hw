@@ -1,11 +1,18 @@
 /*!****************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/styles/style.scss ***!
   \****************************************************************************************************************/
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
 .wrapper {
   position: relative;
   font-family: "Comfortaa";
   font-weight: 500;
   color: #000;
+  height: 100vh;
 }
 
 hr {
@@ -38,6 +45,7 @@ hr {
   font-weight: bold;
   font-size: 2.25rem;
   margin-right: 20px;
+  color: #717171;
 }
 @media (max-width: 580px) {
   .header__title-text {
@@ -56,29 +64,30 @@ hr {
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
+  transition: all 0.6s ease;
 }
 .header__nav-logout:hover {
   transition: box-shadow 0.6s ease;
-  text-decoration: underline;
   box-shadow: 0px 0px 8px 5px rgba(92, 174, 236, 0.336);
 }
 .header__nav-user {
   overflow: hidden;
-  display: inline-flex;
+  text-align: center;
+  padding-top: 5px;
   width: 36px;
   height: 36px;
   font-weight: bold;
-  font-size: 22px;
-  line-height: 22px;
-  border: 1px solid black;
+  font-size: 24px;
+  border: 2px solid rgba(92, 174, 236, 0.795);
+  color: #5caeec;
+  background-color: rgba(226, 241, 253, 0.39);
   border-radius: 50%;
   text-transform: uppercase;
   margin-left: 8px;
-  align-items: center;
-  justify-content: center;
 }
 
 .form-field-wrapper {
+  color: #717171;
   display: flex;
   flex-direction: column;
   margin-bottom: 22px;
@@ -99,7 +108,7 @@ hr {
 
 .form-input {
   padding: 8px;
-  border: 1px solid black;
+  border: 1px solid #717171;
   border-radius: 4px;
 }
 .form-input:focus {
@@ -110,6 +119,7 @@ hr {
 }
 
 .form-label {
+  color: #444444;
   display: block;
   font-size: 1.75rem;
   text-transform: uppercase;
@@ -120,6 +130,7 @@ hr {
 }
 
 .form-switch {
+  color: #444444;
   outline: none;
   cursor: pointer;
   border: none;
@@ -134,15 +145,17 @@ hr {
 
 .form-btn {
   cursor: pointer;
+  color: #444444;
   margin-top: 20px;
   padding: 8px 16px;
-  border: 2px solid black;
+  border: 2px solid #717171;
   border-radius: 4px;
   font-size: 18px;
   font-weight: 500;
   background-color: transparent;
   text-transform: capitalize;
   align-self: flex-end;
+  transition: box-shadow 0.3s ease;
 }
 .form-btn:hover {
   transition: box-shadow 0.3s ease;
@@ -152,7 +165,7 @@ hr {
 .login__form {
   max-width: 500px;
   margin: 0 auto;
-  box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
+  box-shadow: 4px 4px 4px 3px rgba(92, 174, 236, 0.336);
   padding: 16px;
   margin-top: 80px;
   border-radius: 8px;
@@ -172,12 +185,18 @@ hr {
   background-color: crimson !important;
 }
 
-.todo {
-  position: relative;
+.todo__info {
+  text-align: center;
+  font-size: 3rem;
+  color: rgba(226, 241, 253, 0.8);
+  position: absolute;
   z-index: 1;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  grid-gap: 2rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.todo {
   padding: 1rem;
 }
 @media (max-width: 768px) {
@@ -185,8 +204,44 @@ hr {
     grid-gap: 1rem;
   }
 }
+.todo__config-wrapper {
+  position: absolute;
+  background-color: #fff;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #a5dbff8e;
+  z-index: 4;
+  transition: all 0.3s ease-in-out;
+}
+.todo__config-wrapper-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  cursor: pointer;
+  background-color: transparent;
+  border-radius: 50%;
+  border: 1px solid gray;
+  color: gray;
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+.todo__config-wrapper-close:hover {
+  transition: all 0.3s ease;
+  border: 1px solid rgba(223, 5, 5, 0.6);
+  color: rgba(223, 5, 5, 0.801);
+}
 .todo__config-wrapper > div {
-  box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  min-width: 50vw;
+  box-shadow: 4px 4px 4px 3px rgba(92, 174, 236, 0.336);
   padding: 16px;
   border-radius: 8px;
 }
@@ -204,15 +259,19 @@ hr {
   row-gap: 5px;
 }
 .todo__list {
-  display: flex;
-  flex-direction: column;
-  row-gap: 1rem;
+  position: relative;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-gap: 2rem;
 }
 .todo__list-item {
-  box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
+  box-shadow: 4px 4px 4px 3px rgba(92, 174, 236, 0.336);
   border-radius: 8px;
   padding: 20px 30px;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 .todo__list-item-task-name {
   font-weight: 700;
@@ -256,16 +315,24 @@ hr {
   font-size: 0.875rem;
 }
 .todo__list-item-task-btn {
-  padding: 4px 8px;
+  width: 180px;
+  padding: 8px 12px;
   background-color: transparent;
   border: 1px solid black;
   font-size: 0.875rem;
   border-radius: 4px;
   cursor: pointer;
+  transition: all 0.3s ease;
+}
+@media (max-width: 400px) {
+  .todo__list-item-task-btn {
+    width: 100%;
+  }
 }
 .todo__list-item-task-btn:hover {
-  transition: box-shadow 0.3s ease;
-  box-shadow: 0px 0px 4px 4px rgba(92, 174, 236, 0.336);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(1, 107, 189, 0.6);
+  color: rgba(1, 107, 189, 0.904);
 }
 .todo__list-item-close-btn {
   position: absolute;
@@ -279,12 +346,12 @@ hr {
   width: 25px;
   height: 25px;
   text-align: center;
+  transition: all 0.3s ease;
 }
 .todo__list-item-close-btn:hover {
-  background-color: #f7f7f7;
-  color: #000;
-  transition: box-shadow 0.3s ease;
-  box-shadow: 0px 0px 4px 4px rgba(92, 174, 236, 0.336);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(223, 5, 5, 0.6);
+  color: rgba(223, 5, 5, 0.801);
 }
 
 .task-finished {
@@ -399,4 +466,59 @@ hr {
 }
 .hidden {
   display: none;
+}
+
+.add {
+  display: inline-block;
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  height: 3.3rem;
+  width: 3.3rem;
+}
+.add__form {
+  border: 3px solid rgba(92, 174, 236, 0.795);
+  color: #5caeec;
+  background-color: rgba(226, 241, 253, 0.39);
+  font-size: 2em;
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.add__form:hover {
+  transition: all 0.3s ease;
+  border: 2px solid rgba(1, 107, 189, 0.6);
+  color: rgba(1, 107, 189, 0.904);
+}
+.add__tooltip {
+  position: absolute;
+  top: 50%;
+  right: 120%;
+  transform: translateY(-50%);
+  background-color: #a5dbff;
+  color: #747474;
+  white-space: nowrap;
+  padding: 10px 15px;
+  border-radius: 6px;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.5s ease;
+}
+.add__tooltip::before {
+  content: "";
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 6px solid;
+  border-color: #0000 #0000 #0000 #a5dbff;
+}
+
+.add:hover .add__tooltip {
+  transition: opacity 0.5 ease;
+  opacity: 1;
+  visibility: visible;
 }
