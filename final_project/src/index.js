@@ -5,15 +5,37 @@ import {Task} from '../src/components/Task.js';
 import {api, TOKEN_STR} from '../src/components/API.js';
 
 const logContainer = document.querySelector ('.login');
+const container = document.querySelector ('.wrapper');
 const todoConfigWrapper = document.querySelector ('.todo__config-wrapper');
 const headerNav = document.querySelector ('.header__nav');
 const headerUserLogo = document.querySelector ('.header__nav-user');
 const logoutButton = document.querySelector ('.header__nav-logout');
 const taskList = document.querySelector ('.todo__list');
 const formWrapper = document.createElement ('div');
+const addTaskForm = document.querySelector ('.add');
 formWrapper.classList.add ('login__form');
 logContainer.append (formWrapper);
 
+const todoConfigClose = document.createElement ('button');
+todoConfigClose.innerHTML = '<i class="fas fa-times"></i>';
+todoConfigClose.classList.add ('todo__config-wrapper-close');
+todoConfigClose.addEventListener ('click', () =>
+  todoConfigWrapper.classList.add ('hidden')
+);
+
+todoConfigWrapper.addEventListener ('click', (event) => {
+  if(event.target.contains(todoConfigWrapper)){
+    todoConfigWrapper.classList.add ('hidden')
+  }
+})
+
+const taskInnerText = document.createElement ('p');
+taskInnerText.innerText = 'No tasks yet!';
+taskInnerText.classList.add ('todo__info', 'hidden');
+container.append (taskInnerText);
+addTaskForm.addEventListener ('click', () =>
+  todoConfigWrapper.classList.remove ('hidden')
+);
 // Login form
 
 const forLogin = data => {
@@ -75,14 +97,20 @@ register.switchToFormEvent (login);
 const scriptAfterLogin = () => {
   api.autoLogin ().then (user => (headerUserLogo.innerText = user.name[0]));
   hideBlock (logContainer);
+  addTaskForm.classList.remove ('hidden');
   configTask.show ();
   headerNav.classList.toggle ('logged');
-  api.getAllTasks ().then (results =>
-    results.forEach (res => {
-      const newTask = new Task (res.name, res.description, res._id);
-      newTask.show (taskList);
-    })
-  );
+  api.getAllTasks ().then (results => {
+    if (results.length) {
+      taskInnerText.classList.add ('hidden');
+      results.forEach (res => {
+        const newTask = new Task (res.name, res.description, res._id);
+        newTask.show (taskList);
+      });
+    } else {
+      taskInnerText.classList.remove ('hidden');
+    }
+  });
 };
 
 // Task configuration form
@@ -92,14 +120,20 @@ const forConfig = data => {
 };
 
 const afterConfigSubmit = () => {
-  taskList.innerHTML = "";
-  api.getAllTasks ().then (results =>
-    results.forEach (res => {
-      const newTask = new Task (res.name, res.description, res._id);
-      newTask.show (taskList);
-    })
-  );
-}
+  todoConfigWrapper.classList.add('hidden');
+  taskList.innerHTML = '';
+  api.getAllTasks ().then (results => {
+    if (results.length) {
+      taskInnerText.classList.add ('hidden');
+      results.forEach (res => {
+        const newTask = new Task (res.name, res.description, res._id);
+        newTask.show (taskList);
+      });
+    } else {
+      taskInnerText.classList.remove ('hidden');
+    }
+  });
+};
 
 const configTask = new Form (
   'add task',
@@ -115,107 +149,16 @@ const configTask = new Form (
   afterConfigSubmit
 );
 
+configTask.formWrapper.append(todoConfigClose);
+
 const hideBlock = block => {
   block.classList.toggle ('hidden');
 };
 
 logoutButton.addEventListener ('click', () => {
   localStorage.removeItem (TOKEN_STR);
+  addTaskForm.classList.add ('hidden');
   document.location.reload ();
 });
 
 loginAfterSubmit ();
-
-// // Handling login form submit
-
-// loginForm.formBody.addEventListener ('submit', async event => {
-//   event.preventDefault ();
-//   const logEmail = document.getElementById ('login-email');
-//   const logPassword = document.getElementById ('login-password');
-
-//   api
-//     .logUser ({
-//       email: logEmail.value,
-//       password: logPassword.value,
-//     })
-//     .then (() => {
-//       scriptAfterLogin ();
-//     })
-//     .catch (error => {
-//       error.data.details.forEach (err => {
-//         if (logEmail.name === err.path[0]) {
-//           logEmail.nextElementSibling.innerText = err.message;
-//           console.log (err.message);
-//         } else if (logPassword.name === err.path[0]) {
-//           logPassword.nextElementSibling.innerText = err.message;
-//         }
-//       });
-//     });
-// });
-
-// // Handling register form submit
-
-// registerForm.formBody.addEventListener ('submit', async event => {
-//   event.preventDefault ();
-//   const regEmail = document.getElementById ('reg-email');
-//   const regName = document.getElementById ('reg-name');
-//   const regPassword = document.getElementById ('reg-password');
-//   api
-//     .regUser ({
-//       email: regEmail.value,
-//       name: regName.value,
-//       password: regPassword.value,
-//     })
-//     .then (() => {
-//       registerForm.hide ();
-//       loginForm.show (formWrapper);
-//       switchRegisterBtn.innerHTML = REGISTER_TEXT;
-//     })
-//     .catch (error => {
-//       if (!error.data.details) {
-//         alert(error.data.email)
-//       } else {
-//         error.data.details.forEach (err => {
-//           if (regEmail.name === err.path[0]) {
-//             regEmail.nextElementSibling.innerText = err.message;
-//           } else if (regName.name === err.path[0]) {
-//             regName.nextElementSibling.innerText = err.message;
-//           } else if (regPassword.name === err.path[0]) {
-//             regPassword.nextElementSibling.innerText = err.message;
-//           }
-//         });
-//       }
-//     });
-// });
-
-// Handling task config form submit
-
-// configForm.formBody.addEventListener ('submit', event => {
-//   event.preventDefault ();
-
-//   const taskName = document.getElementById ('task-add-name');
-//   const taskDescription = document.getElementById ('task-add-description');
-//   api
-//     .addTask ({
-//       name: taskName.value,
-//       description: taskDescription.value,
-//     })
-//     .then (result => {
-//       console.log (result);
-//       const newTask = new Task (result.name, result.description, result._id);
-//       newTask.show (taskList);
-//     })
-//     .catch (error => {
-//       error.data.details.forEach (err => {
-//         if (taskName.name === err.path[0]) {
-//           taskName.nextElementSibling.innerText = err.message;
-//         } else if (taskDescription.name === err.path[0]) {
-//           taskDescription.nextElementSibling.innerText = err.message;
-//         }
-//       });
-//     });
-// });
-
-// before rebuild problems left:
-// - task timer
-// - second task on page on pause click don't stop sending requests

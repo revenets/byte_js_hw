@@ -144,6 +144,7 @@ export class Task {
     this.closeButton.addEventListener ('click', () => {
       this.taskContainer.remove ();
       api.removeTask (this.taskId);
+      document.location.reload ();
     });
 
     this.taskContainer.append (
@@ -160,16 +161,3 @@ export class Task {
     div.append (this.taskContainer);
   }
 }
-
-// {
-//   "name": "do something",
-//   "description": "do something",
-//   "timeTracked": 0,
-//   "userId": "6225f8ae4be637e54566d976",
-//   "isActive": false,
-//   "isFinished": false,
-//   "_id": "6236f61b999f5028eb3a2d00",
-//   "createdAt": "2022-03-20T09:38:35.505Z",
-//   "updatedAt": "2022-03-20T09:38:35.505Z",
-//   "__v": 0
-// }
