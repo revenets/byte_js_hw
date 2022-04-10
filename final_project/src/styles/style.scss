@@ -109,7 +109,7 @@ hr {
 
 .form-input {
     padding: 8px;
-    border: 1px solid#717171;
+    border: 1px solid #717171;
     border-radius: 4px;
 
     &:focus {
@@ -386,7 +386,9 @@ hr {
 }
 
 .task-finished {
-    text-decoration: line-through;
+    & > :not(button) {
+        text-decoration: line-through;
+    }
 }
 
 .preloader__wrapper {

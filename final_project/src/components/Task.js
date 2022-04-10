@@ -15,10 +15,14 @@ const msToTime = duration => {
 let interval = null;
 
 export class Task {
-  constructor (name, description, taskId) {
+  constructor (options) {
+    const {name, description, _id:taskId, timeTracked, isFinished, isActive} = options;
     this.name = name;
     this.description = description;
     this.taskId = taskId;
+    this.timer = timeTracked;
+    this.IsFinished = isFinished;
+    this.isActive = isActive;
     this.taskContainer = document.createElement ('div');
     this.closeButton = document.createElement ('button');
     this.render ();
@@ -34,7 +38,7 @@ export class Task {
     const taskTracker = document.createElement ('div');
     const trackerButton = document.createElement ('button');
     const trackerIcon = document.createElement ('i');
-    trackerIcon.classList.add ('fas', 'fa-play');
+    trackerIcon.classList.add ('fas');
     trackerButton.append (trackerIcon);
     this.trackerCountdown = document.createElement ('span');
     taskTracker.append (trackerButton, this.trackerCountdown);
@@ -62,22 +66,19 @@ export class Task {
       second: '2-digit',
     });
     let interval = null;
-    let timer = 0;
-    this.trackerCountdown.innerHTML = msToTime (timer);
+    let timer = this.timer;
+    this.trackerCountdown.innerHTML = msToTime(timer);
     taskCompleteButton.innerText = 'Mark as done';
     this.closeButton.innerHTML = '<i class="fas fa-times"></i>';
-
-    
 
     const startTimer = () => {
       trackerButton.classList.add ('btn-stop');
       trackerIcon.classList.remove ('fa-play');
       trackerIcon.classList.add ('fa-pause');
-      api.editTask (this.taskId, {isActive: true});
       return new Promise (resolve => {
         interval = setInterval (() => {
           timer += 1000;
-          this.trackerCountdown.innerHTML = msToTime (timer);
+          this.trackerCountdown.innerHTML = msToTime(timer);
         }, 1000);
       });
     };
@@ -86,12 +87,26 @@ export class Task {
       trackerButton.classList.remove ('btn-stop');
       trackerIcon.classList.remove ('fa-pause');
       trackerIcon.classList.add ('fa-play');
-      api.editTask (this.taskId, {isActive: false}).then (task => {
-        // startTimerValue = msToTime (task.timeTracked);
-      });
       clearInterval (interval);
       interval = null;
     };
+
+    if(this.isActive) {
+      startTimer();
+    } else {
+      stopTimer();
+    }
+
+    trackerButton.addEventListener ('click', () => {
+      if (trackerButton.classList.contains('btn-stop')) {
+        api.editTask (this.taskId, {isActive: false});
+        stopTimer ();
+      } else {
+        api.editTask (this.taskId, {isActive: true});
+        startTimer ();
+        console.log (timer)
+      }
+    });
 
     const finishTask = () => {
       this.taskContainer.classList.add ('task-finished');
@@ -105,17 +120,14 @@ export class Task {
       trackerButton.removeAttribute ('disabled', '');
     };
 
-    trackerButton.addEventListener ('click', () => {
-      if (trackerButton.classList.contains ('btn-stop')) {
-        stopTimer ();
-      } else {
-        startTimer ();
-        console.log (timer)
-      }
-    });
+    if(this.IsFinished) {
+      finishTask();
+    } else {
+      restartTask();
+    }
 
     taskCompleteButton.addEventListener ('click', () => {
-      if (taskCompleteButton.innerHTML === 'Restart') {
+      if (this.taskContainer.classList.contains ('task-finished')) {
         restartTask();
         this.trackerCountdown.innerHTML = "00:00:00"
         api.editTask (this.taskId, {
@@ -126,25 +138,15 @@ export class Task {
         finishTask();
         stopTimer ();
         api.editTask (this.taskId, {
+          isActive: false,
           isFinished: true,
         });
-      }
-    });
-
-    api.getTaskById (this.taskId).then (result => {
-      this.trackerCountdown.innerText = msToTime (result.timeTracked);
-      timer = result.timeTracked;
-      if (result.isFinished) {
-        finishTask ();
-      } else {
-        restartTask ();
       }
     });
 
     this.closeButton.addEventListener ('click', () => {
       this.taskContainer.remove ();
       api.removeTask (this.taskId);
-      document.location.reload ();
     });
 
     this.taskContainer.append (

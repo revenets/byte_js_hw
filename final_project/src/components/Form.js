@@ -72,8 +72,9 @@ export class Form {
       // console.log (this.formValues);
       preloader.classList.toggle ('hidden');
       try {
-        await this.submitHandler (this.formValues);
-        this.afterSubmit ();
+        await this.submitHandler (this.formValues).then(result => {
+          this.afterSubmit (result);
+        });
       } catch (error) {
         if (!error.data.details) {
           if (error.data.email) {

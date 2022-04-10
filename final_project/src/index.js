@@ -104,7 +104,7 @@ const scriptAfterLogin = () => {
     if (results.length) {
       taskInnerText.classList.add ('hidden');
       results.forEach (res => {
-        const newTask = new Task (res.name, res.description, res._id);
+        const newTask = new Task (res);
         newTask.show (taskList);
       });
     } else {
@@ -119,20 +119,11 @@ const forConfig = data => {
   return api.addTask (data);
 };
 
-const afterConfigSubmit = () => {
+const afterConfigSubmit = (res) => {
   todoConfigWrapper.classList.add('hidden');
-  taskList.innerHTML = '';
-  api.getAllTasks ().then (results => {
-    if (results.length) {
-      taskInnerText.classList.add ('hidden');
-      results.forEach (res => {
-        const newTask = new Task (res.name, res.description, res._id);
-        newTask.show (taskList);
-      });
-    } else {
-      taskInnerText.classList.remove ('hidden');
-    }
-  });
+  const newTask = new Task (res);
+  newTask.show (taskList);
+  taskInnerText.classList.add ('hidden');
 };
 
 const configTask = new Form (
@@ -162,3 +153,11 @@ logoutButton.addEventListener ('click', () => {
 });
 
 loginAfterSubmit ();
+
+taskList.addEventListener ('click', (e) => {
+  const taskCloseBtns = document.querySelectorAll('.todo__list-item-close-btn');
+  if(!taskCloseBtns.length) {
+    taskInnerText.classList.remove ('hidden');
+  }
+})
+
