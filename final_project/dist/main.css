@@ -354,7 +354,7 @@ hr {
   color: rgba(223, 5, 5, 0.801);
 }
 
-.task-finished {
+.task-finished > :not(button) {
   text-decoration: line-through;
 }
 
